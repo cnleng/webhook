@@ -1,0 +1,38 @@
+metadata:
+  labels:
+    app: webhook
+  name: webhook
+  namespace: webhook
+spec:
+  ports:
+  - name: http
+    port: 8000
+    targetPort: 5000
+  selector:
+    app: webhook
+    #type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webhook
+  namespace: webhook
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webhook
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: webhook
+        version: v1
+    spec:
+      serviceAccountName: webhook
+      containers:
+      - image: cnleng/webhook
+        imagePullPolicy: IfNotPresent
+        name: webhook
+        ports:
+        - containerPort: 5000
