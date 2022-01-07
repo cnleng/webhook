@@ -1,17 +1,20 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 import json, os, requests, collections, time
 import pickle
+
 app = Flask(__name__)
+CORS(app)
 
 PUT = "PUT"
 POST = "POST"
 GET = "GET"
 PATCH = "PATCH"
 
-@app.route("/api/v1/", methods=['GET'])
+@app.route("/api/v1/posts", methods=['GET'])
 def default():
-    message = {'message': 'hello world!'}
-    return message
+    posts = [{'id': 1, 'title': 'hello world!', 'body': 'post body'}]
+    return jsonify(posts)
 
 @app.route("/api/v1/webhook/", methods=['POST'])
 def notification():
